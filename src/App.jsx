@@ -6,17 +6,23 @@ const App = () => {
 
   const handleChange = () => setNewName(event.target.value);
 
+  const checkDuplicateName = (name) => {
+    if (name) return persons.some((person) => person.name === name.name);
+  };
+
   const addName = () => {
     event.preventDefault();
     const nameToAdd = {
       name: newName,
     };
 
-    setPersons(persons.concat(nameToAdd));
-    setNewName("");
+    if (checkDuplicateName(nameToAdd) === true) {
+      alert(`${nameToAdd.name} is already added to phonebook! 🚨`);
+    } else {
+      setPersons(persons.concat(nameToAdd));
+      setNewName("");
+    }
   };
-
-  // console.log(persons);
 
   return (
     <div>
@@ -31,7 +37,6 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       ...
-      <div>debug: {newName}</div>
       {persons.map((newName) => (
         <div key={newName.name}>debug: {newName.name}</div>
       ))}
