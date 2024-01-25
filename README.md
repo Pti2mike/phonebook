@@ -12,7 +12,7 @@ _A Simple application to register name & number_
 
 ## Installation
 
-Anecdotes requires [Node.js](https://nodejs.org/) v18+ to run.
+Phonebook requires [Node.js](https://nodejs.org/) v18+ to run.
 
 Install the dependencies and devDependencies and start the server.
 
