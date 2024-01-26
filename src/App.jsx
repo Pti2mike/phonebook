@@ -36,7 +36,6 @@ const App = () => {
     const nameToAdd = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
     };
 
     if (checkDuplicateName(nameToAdd) === true) {
@@ -44,9 +43,13 @@ const App = () => {
     } else if (checkDuplicateNumber(nameToAdd) === true) {
       alert(`${nameToAdd.number} is already added to phonebook! 🚨`);
     } else {
-      setPersons(persons.concat(nameToAdd));
-      setNewName("");
-      setNewNumber("");
+      axios
+        .post("http://localhost:3001/persons", nameToAdd)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+        });
     }
   };
 
