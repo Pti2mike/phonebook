@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import personService from "./services/persons";
+// import axios from "axios";
 import Header from "./components/Header";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
@@ -12,8 +13,8 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   const getDataFromServer = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAllPersons().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   };
 
@@ -43,13 +44,11 @@ const App = () => {
     } else if (checkDuplicateNumber(nameToAdd) === true) {
       alert(`${nameToAdd.number} is already added to phonebook! 🚨`);
     } else {
-      axios
-        .post("http://localhost:3001/persons", nameToAdd)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-          setNewName("");
-          setNewNumber("");
-        });
+      personService.createPerson(nameToAdd).then((returnNote) => {
+        setPersons(persons.concat(returnNote));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
