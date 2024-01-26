@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
-// import axios from "axios";
 import Header from "./components/Header";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
