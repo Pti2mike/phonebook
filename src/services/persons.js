@@ -11,6 +11,11 @@ const createPerson = (dataSend) => {
   return request.then((response) => response.data);
 };
 
+const updatePerson = (id, obj) => {
+  const request = axios.put(`${baseUrl}/${id}`, obj);
+  return request.then((response) => response.data);
+};
+
 const deletePerson = (id) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
@@ -18,5 +23,6 @@ const deletePerson = (id) => {
 export default {
   getAllPersons,
   createPerson,
+  updatePerson,
   deletePerson,
 };

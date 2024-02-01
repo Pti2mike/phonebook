@@ -26,11 +26,7 @@ const App = () => {
   const handleFilterChange = (event) => setFilter(event.target.value);
 
   const checkDuplicateName = (name) => {
-    if (name) return persons.some((person) => person.name === name.name);
-  };
-  const checkDuplicateNumber = (number) => {
-    if (number)
-      return persons.some((person) => person.number === number.number);
+    return persons.find((person) => person.name === name.name) || null;
   };
 
   const addName = (event) => {
@@ -40,13 +36,36 @@ const App = () => {
       number: newNumber,
     };
 
-    if (checkDuplicateName(nameToAdd) === true) {
-      alert(`${nameToAdd.name} is already added to phonebook! 🚨`);
-    } else if (checkDuplicateNumber(nameToAdd) === true) {
-      alert(`${nameToAdd.number} is already added to phonebook! 🚨`);
+    const existingPerson = checkDuplicateName(nameToAdd);
+
+    if (existingPerson !== null) {
+      const confirmation = window.confirm(
+        `${existingPerson.name} is already added to phonebook! Do you want to update the number?`
+      );
+      if (confirmation) {
+        const personIdToUpdate = existingPerson.id;
+        const updatedPerson = { name: newName, number: newNumber };
+
+        personService
+          .updatePerson(personIdToUpdate, updatedPerson)
+          .then(() => {
+            setPersons(
+              persons.map((person) =>
+                person.id === personIdToUpdate
+                  ? { ...person, ...updatedPerson }
+                  : person
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.log("Error updating person: ", error);
+          });
+      }
     } else {
-      personService.createPerson(nameToAdd).then((returnNote) => {
-        setPersons(persons.concat(returnNote));
+      personService.createPerson(nameToAdd).then((returnPerson) => {
+        setPersons(persons.concat(returnPerson));
         setMessage(`Added '${nameToAdd.name}'`);
         setTimeout(() => {
           setMessage(null);
