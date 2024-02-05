@@ -49,6 +49,10 @@ const App = () => {
         personService
           .updatePerson(personIdToUpdate, updatedPerson)
           .then(() => {
+            setMessage(`Updated number for ${updatedPerson.name}`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
             setPersons(
               persons.map((person) =>
                 person.id === personIdToUpdate
