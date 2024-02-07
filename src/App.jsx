@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("");
 
   const getDataFromServer = () => {
     personService.getAllPersons().then((initialPersons) => {
@@ -50,6 +51,7 @@ const App = () => {
           .updatePerson(personIdToUpdate, updatedPerson)
           .then(() => {
             setMessage(`Updated number for ${updatedPerson.name}`);
+            setMessageType("success");
             setTimeout(() => {
               setMessage(null);
             }, 5000);
@@ -63,14 +65,24 @@ const App = () => {
             setNewName("");
             setNewNumber("");
           })
-          .catch((error) => {
-            console.log("Error updating person: ", error);
+          .catch(() => {
+            setMessage(
+              `Impossible to update ${updatedPerson.name}! It does not exist.`
+            );
+            setMessageType("error");
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+            setPersons(persons.filter((p) => p.id !== personIdToUpdate));
+            setNewName("");
+            setNewNumber("");
           });
       }
     } else {
       personService.createPerson(nameToAdd).then((returnPerson) => {
         setPersons(persons.concat(returnPerson));
         setMessage(`Added '${nameToAdd.name}'`);
+        setMessageType("success");
         setTimeout(() => {
           setMessage(null);
         }, 5000);
@@ -97,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} messageType={messageType} />
 
       <Filter handleFilterChange={handleFilterChange} />
 
