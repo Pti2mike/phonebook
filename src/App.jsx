@@ -79,16 +79,27 @@ const App = () => {
           });
       }
     } else {
-      personService.createPerson(nameToAdd).then((returnPerson) => {
-        setPersons(persons.concat(returnPerson));
-        setMessage(`Added '${nameToAdd.name}'`);
-        setMessageType("success");
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .createPerson(nameToAdd)
+        .then((returnPerson) => {
+          setPersons(persons.concat(returnPerson));
+          setMessage(`Added '${nameToAdd.name}'`);
+          setMessageType("success");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          setMessage(error.response.data.error);
+          setMessageType("error");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          setNewName("");
+          setNewNumber("");
+        });
     }
   };
 
